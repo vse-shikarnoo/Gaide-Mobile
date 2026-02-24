@@ -22,15 +22,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import kv.gaide.data.models.AuthState
+import kv.gaide.viewmodel.AuthViewModel
 
 @Composable
-fun RegisterScreen(
-    viewModel: AndroidAuthViewModel,
+fun AuthScreen(
+    viewModel: AuthViewModel,
+    onNavigateToRegister: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
-    val name by viewModel.name.collectAsState()
     val state by viewModel.state.collectAsState()
 
     Column(
@@ -40,19 +41,9 @@ fun RegisterScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Регистрация", style = MaterialTheme.typography.headlineMedium)
+        Text("Вход", style = MaterialTheme.typography.headlineMedium)
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = name,
-            onValueChange = viewModel::updateName,
-            label = { Text("Имя (необязательно)") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
             value = email,
@@ -76,21 +67,21 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = viewModel::register,
+            onClick = viewModel::login,
             enabled = state != AuthState.Loading,
             modifier = Modifier.fillMaxWidth()
         ) {
             if (state == AuthState.Loading) {
                 CircularProgressIndicator(modifier = Modifier.size(24.dp))
             } else {
-                Text("Зарегистрироваться")
+                Text("Войти")
             }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextButton(onClick = onNavigateBack) {
-            Text("Уже есть аккаунт? Войти")
+        TextButton(onClick = onNavigateToRegister) {
+            Text("Нет аккаунта? Зарегистрироваться")
         }
 
         if (state is AuthState.Error) {

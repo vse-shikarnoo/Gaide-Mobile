@@ -1,6 +1,7 @@
 package kv.gaide.viewmodel
 
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,8 +13,7 @@ import kv.gaide.data.repository.AuthRepository
 
 class AuthViewModel(
     private val repository: AuthRepository,
-    private val coroutineScope: CoroutineScope
-) {
+): ViewModel() {
     private val _state = MutableStateFlow<AuthState>(AuthState.Idle)
     val state: StateFlow<AuthState> = _state.asStateFlow()
 
@@ -49,7 +49,7 @@ class AuthViewModel(
             return
         }
 
-        coroutineScope.launch {
+        viewModelScope.launch {
             _state.value = AuthState.Loading
             val request = LoginRequest(email.value, password.value)
             val result = repository.login(request)
@@ -71,7 +71,7 @@ class AuthViewModel(
             return
         }
 
-        coroutineScope.launch {
+        viewModelScope.launch {
             _state.value = AuthState.Loading
             val request =
                 RegisterRequest(email.value, password.value, name.value.takeIf { it.isNotBlank() })

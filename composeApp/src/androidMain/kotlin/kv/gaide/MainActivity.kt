@@ -12,12 +12,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kv.gaide.data.models.AuthState
 import kv.gaide.presentation.HomeScreen
-import kv.gaide.presentation.auth.AndroidAuthViewModel
 import kv.gaide.presentation.auth.AndroidAuthViewModelFactory
 import kv.gaide.presentation.auth.AuthScreen
 import kv.gaide.presentation.auth.RegisterScreen
 import kv.gaide.presentation.onboarding.OnboardingPage
 import kv.gaide.presentation.onboarding.OnboardingScreen
+import kv.gaide.viewmodel.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val application = application as MyApplication
-            val authViewModel: AndroidAuthViewModel = viewModel(
+            val authViewModel: AuthViewModel = viewModel(
                 factory = AndroidAuthViewModelFactory(application.authRepository)
             )
 
