@@ -18,7 +18,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
 
     NavHost(
         navController = navController,
-        startDestination = MainDestinations.Auth
+        startDestination = MainDestinations.Main
     ) {
         composable(MainDestinations.Auth) {
             AuthNavGraph(
@@ -32,7 +32,6 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
         composable(MainDestinations.Main) {
             MuseumListScreen(
                 onMuseumClick = {},
-                onProfileClick = {  }
             )
         }
     }
