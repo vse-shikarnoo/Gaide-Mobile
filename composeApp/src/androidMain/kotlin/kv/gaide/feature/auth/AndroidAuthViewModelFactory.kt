@@ -1,9 +1,8 @@
-package kv.gaide.presentation.auth
+package kv.gaide.feature.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kv.gaide.data.repository.AuthRepository
-import kv.gaide.viewmodel.AuthViewModel
 
 class AndroidAuthViewModelFactory(
     private val repository: AuthRepository

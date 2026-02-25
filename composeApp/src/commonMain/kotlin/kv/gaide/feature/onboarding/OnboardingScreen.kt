@@ -1,4 +1,4 @@
-package kv.gaide.presentation.onboarding
+package kv.gaide.feature.onboarding
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
