@@ -16,6 +16,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -25,12 +27,13 @@ import kv.gaide.utils.getColorForStrength
 
 @Composable
 fun LoginScreen(
-    uiState: AuthUiState,
+    viewModel: AuthViewModel,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
     onNavigateToRegister: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +58,7 @@ fun LoginScreen(
 
         if (uiState.emailError != null) {
             Text(
-                text = uiState.emailError,
+                text = uiState.emailError!!,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier
@@ -114,7 +117,7 @@ fun LoginScreen(
         if (uiState.errorMessage != null) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = uiState.errorMessage,
+                text = uiState.errorMessage!!,
                 color = MaterialTheme.colorScheme.error
             )
         }

@@ -12,12 +12,12 @@ import kotlinx.coroutines.launch
 import kv.gaide.data.models.LoginRequest
 import kv.gaide.data.models.RegisterRequest
 import kv.gaide.data.repository.AuthRepository
+import kv.gaide.data.repository.AuthRepositoryImpl
 import kv.gaide.utils.PasswordStrength
 import kv.gaide.utils.passwordStrength
 
-class AuthViewModel(
-    private val repository: AuthRepository,
-) : ViewModel() {
+class AuthViewModel() : ViewModel() {
+    private val repository: AuthRepository = AuthRepositoryImpl()
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState
 

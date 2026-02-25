@@ -16,6 +16,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -25,13 +27,14 @@ import kv.gaide.utils.getColorForStrength
 
 @Composable
 fun RegistrationScreen(
-    uiState: AuthUiState,
+    viewModel: AuthViewModel,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onNameChange: (String) -> Unit,
     onRegisterClick: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -66,7 +69,7 @@ fun RegistrationScreen(
 
         if (uiState.emailError != null) {
             Text(
-                text = uiState.emailError,
+                text = uiState.emailError!!,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier
@@ -124,7 +127,7 @@ fun RegistrationScreen(
 
         if (uiState.errorMessage != null) {
             Text(
-                text = uiState.errorMessage,
+                text = uiState.errorMessage!!,
                 color = MaterialTheme.colorScheme.error
             )
         }

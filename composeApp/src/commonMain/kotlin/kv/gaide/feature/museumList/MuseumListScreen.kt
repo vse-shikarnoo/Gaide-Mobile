@@ -10,15 +10,20 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun MuseumListScreen(
-    uiState: MuseumListUiState,
+    viewModel: MuseumListViewModel = viewModel(),
     onMuseumClick: (String) -> Unit,
     onProfileClick: () -> Unit
 ) {
+
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier

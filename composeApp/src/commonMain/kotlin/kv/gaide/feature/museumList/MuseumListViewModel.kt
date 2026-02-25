@@ -1,9 +1,10 @@
 package kv.gaide.feature.museumList
 
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class MuseumListViewModel {
+class MuseumListViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         MuseumListUiState(
