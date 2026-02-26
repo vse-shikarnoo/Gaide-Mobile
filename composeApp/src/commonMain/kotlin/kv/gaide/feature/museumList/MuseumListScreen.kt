@@ -19,44 +19,25 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kv.gaide.data.models.Museum
 
-data class Museum(val id: Int, val name: String, val location: String, val imageRes: Int? = null)
-val sampleMuseums = listOf(
-    Museum(1, "Национальная галерея искусства", "Вашингтон"),
-    Museum(2, "Метрополитен-музей", "Нью-Йорк"),
-    Museum(3, "Лувр", "Париж"),
-    Museum(1, "Национальная галерея искусства", "Вашингтон"),
-    Museum(2, "Метрополитен-музей", "Нью-Йорк"),
-    Museum(3, "Лувр", "Париж"),
-    Museum(1, "Национальная галерея искусства", "Вашингтон"),
-    Museum(2, "Метрополитен-музей", "Нью-Йорк"),
-    Museum(3, "Лувр", "Париж"),
-    Museum(1, "Национальная галерея искусства", "Вашингтон"),
-    Museum(2, "Метрополитен-музей", "Нью-Йорк"),
-    Museum(3, "Лувр", "Париж"),
-    Museum(1, "Национальная галерея искусства", "Вашингтон"),
-    Museum(2, "Метрополитен-музей", "Нью-Йорк"),
-    Museum(3, "Лувр", "Париж"),
-    Museum(1, "Национальная галерея искусства", "Вашингтон"),
-    Museum(2, "Метрополитен-музей", "Нью-Йорк"),
-    Museum(3, "Лувр", "Париж"),
-    Museum(1, "Национальная галерея искусства", "Вашингтон"),
-    Museum(2, "Метрополитен-музей", "Нью-Йорк"),
-    Museum(3, "Лувр", "Париж"),
-    Museum(1, "Национальная галерея искусства", "Вашингтон"),
-    Museum(2, "Метрополитен-музей", "Нью-Йорк"),
-    Museum(3, "Лувр", "Париж"),
-)
+
 @Composable
 fun MuseumListScreen(
+    viewModel: MuseumListViewModel = viewModel(),
     onMuseumClick: () -> Unit = {}
 ) {
+
+    val uiState by viewModel.uiState.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -64,9 +45,17 @@ fun MuseumListScreen(
             .padding(16.dp)
             .padding(horizontal = 16.dp)
     ) {
-        item { SearchBar() }
+        item {
+            SearchBar(
+                search = uiState.searchName,
+                onSearchValueChange = {
+                    viewModel.updateSearch(it)
+                    viewModel.getMuseumByName(it)
+                }
+            )
+        }
         item { CategoryChips() }
-        items(sampleMuseums) { museum ->
+        items(uiState.museums) { museum ->
             MuseumCard(museum = museum, onClick = { onMuseumClick() })
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -75,12 +64,15 @@ fun MuseumListScreen(
 
 // Строка поиска
 @Composable
-fun SearchBar() {
+fun SearchBar(
+    search: String = "",
+    onSearchValueChange: (String) -> Unit
+) {
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = search,
+        onValueChange = onSearchValueChange,
         placeholder = { Text("Search Museum") },
-        leadingIcon = {  },
+        leadingIcon = { },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = TextFieldDefaults.colors(
@@ -123,7 +115,7 @@ fun MuseumCard(museum: Museum, onClick: () -> Unit) {
         ) {
             Column {
                 Text(text = museum.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text(text = museum.location, color = Color.Gray, fontSize = 14.sp)
+                Text(text = museum.city, color = Color.Gray, fontSize = 14.sp)
             }
         }
     }

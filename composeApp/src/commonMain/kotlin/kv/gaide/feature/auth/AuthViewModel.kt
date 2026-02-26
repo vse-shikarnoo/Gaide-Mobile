@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kv.gaide.data.models.LoginRequest
 import kv.gaide.data.models.RegisterRequest
-import kv.gaide.data.repository.AuthRepository
-import kv.gaide.data.repository.AuthRepositoryImpl
+import kv.gaide.data.repository.auth.AuthRepository
+import kv.gaide.data.repository.auth.AuthRepositoryImpl
 import kv.gaide.utils.PasswordStrength
 import kv.gaide.utils.passwordStrength
 
@@ -58,7 +58,11 @@ class AuthViewModel() : ViewModel() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val request = LoginRequest(_uiState.value.email, _uiState.value.password)
-            val result = repository.login(request)
+            repository.login(request).onSuccess {
+
+            }.onFailure {
+
+            }
             delay(1000)
             _uiState.update { it.copy(isLoading = false) }
             _events.emit(AuthEvent.LoginSuccess)
