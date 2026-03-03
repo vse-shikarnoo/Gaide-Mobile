@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kv.gaide.common.ui.CardHorizontal
 import kv.gaide.common.ui.CardVertical
+import kv.gaide.common.ui.MuseumCard
 
 
 @Composable
@@ -54,13 +55,18 @@ fun MuseumListScreen(
             ) {
                 items(uiState.museums) { museum ->
                     CardVertical(
-                        name = museum.name,
+                        title = museum.name,
                         onClick = { onMuseumClick() })
                 }
             }
         }
+        item {
+            MuseumCard(
+                museum = uiState.museums.first(),
+                onClick = { onMuseumClick() })
+        }
         items(uiState.museums) { museum ->
-            CardHorizontal(name = museum.name, onClick = { onMuseumClick() })
+            CardHorizontal(title = museum.name, onClick = { onMuseumClick() })
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
