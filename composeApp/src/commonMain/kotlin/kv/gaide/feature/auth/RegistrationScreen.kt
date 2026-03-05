@@ -1,4 +1,4 @@
-package kv.gaide.presentation.auth
+package kv.gaide.feature.auth
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -21,18 +22,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import kv.gaide.data.models.AuthState
-import kv.gaide.viewmodel.AuthViewModel
+import kv.gaide.utils.PasswordStrength
+import kv.gaide.utils.getColorForStrength
 
 @Composable
-fun RegisterScreen(
+fun RegistrationScreen(
     viewModel: AuthViewModel,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onNameChange: (String) -> Unit,
+    onRegisterClick: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
-    val email by viewModel.email.collectAsState()
-    val password by viewModel.password.collectAsState()
-    val name by viewModel.name.collectAsState()
-    val state by viewModel.state.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -46,8 +48,8 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = name,
-            onValueChange = viewModel::updateName,
+            value = uiState.name,
+            onValueChange = onNameChange,
             label = { Text("Имя (необязательно)") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
@@ -55,33 +57,62 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // EMAIL
         OutlinedTextField(
-            value = email,
-            onValueChange = viewModel::updateEmail,
+            value = uiState.email,
+            onValueChange = onEmailChange,
             label = { Text("Email") },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            isError = uiState.emailError != null,
+            modifier = Modifier.fillMaxWidth(),
         )
+
+        if (uiState.emailError != null) {
+            Text(
+                text = uiState.emailError!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth()
+            )
+        } else {
+            Spacer(modifier = Modifier.height(32.dp))
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // PASSWORD
         OutlinedTextField(
-            value = password,
-            onValueChange = viewModel::updatePassword,
-            label = { Text("Пароль") },
+            value = uiState.password,
+            onValueChange = onPasswordChange,
+            label = {
+                Text(
+                    when (uiState.passwordStrength) {
+                        PasswordStrength.BLANK -> "Пароль"
+                        else -> uiState.passwordStrength.message
+                    },
+                    color = getColorForStrength(uiState.passwordStrength)
+                )
+            },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedBorderColor = getColorForStrength(uiState.passwordStrength),
+                focusedBorderColor = getColorForStrength(uiState.passwordStrength),
+                errorBorderColor = MaterialTheme.colorScheme.error
+            ),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         Button(
-            onClick = viewModel::register,
-            enabled = state != AuthState.Loading,
+            onClick = onRegisterClick,
+            enabled = !uiState.isLoading,
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (state == AuthState.Loading) {
+            if (uiState.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.size(24.dp))
             } else {
                 Text("Зарегистрироваться")
@@ -94,9 +125,9 @@ fun RegisterScreen(
             Text("Уже есть аккаунт? Войти")
         }
 
-        if (state is AuthState.Error) {
+        if (uiState.errorMessage != null) {
             Text(
-                text = (state as AuthState.Error).message,
+                text = uiState.errorMessage!!,
                 color = MaterialTheme.colorScheme.error
             )
         }

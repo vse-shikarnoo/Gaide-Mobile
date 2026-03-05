@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+
+    //id("ru.ivk1800.riflesso") // <- Important! You need to add it after the compose plugin.
+
+
 }
 
 kotlin {
@@ -14,7 +18,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -24,13 +28,16 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.navigation.compose)
             implementation(libs.android.lottie.compose)
+            implementation(libs.ktor.client.okhttp)
+
+            //implementation("ru.ivk1800.riflesso:client:2.2.21-0.0.3")
+
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -42,6 +49,15 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.coil.compose)
+            implementation(libs.coil.svg)
+            implementation(libs.coil.network.ktor3)
+            implementation(libs.ktor.client.core)
+
+            implementation(libs.navigation.compose)
+
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

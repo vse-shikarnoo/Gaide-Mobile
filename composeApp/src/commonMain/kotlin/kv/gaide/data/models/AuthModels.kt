@@ -19,11 +19,3 @@ data class RegisterRequest(
 data class AuthResponse(
     val isAuth: Boolean,
 )
-
-// Для UI состояний
-sealed class AuthState {
-    object Idle : AuthState()
-    object Loading : AuthState()
-    object Success : AuthState()
-    data class Error(val message: String) : AuthState()
-}
