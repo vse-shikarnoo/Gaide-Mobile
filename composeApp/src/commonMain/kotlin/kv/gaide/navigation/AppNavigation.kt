@@ -5,10 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import kv.gaide.feature.museumList.MuseumListScreen
 import kv.gaide.navigation.auth.AuthNavGraph
+import kv.gaide.navigation.main.MainNavGraph
 
-object MainDestinations {
+object RouteDestinations {
     const val Auth = "auth_graph"
     const val Main = "main_screen"
 }
@@ -18,21 +18,19 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
 
     NavHost(
         navController = navController,
-        startDestination = MainDestinations.Auth
+        startDestination = RouteDestinations.Main
     ) {
-        composable(MainDestinations.Auth) {
+        composable(RouteDestinations.Auth) {
             AuthNavGraph(
                 onAuthSuccess = {
-                    navController.navigate(MainDestinations.Main) {
-                        popUpTo(MainDestinations.Auth) { inclusive = true }
+                    navController.navigate(RouteDestinations.Main) {
+                        popUpTo(RouteDestinations.Auth) { inclusive = true }
                     }
                 }
             )
         }
-        composable(MainDestinations.Main) {
-            MuseumListScreen(
-                onMuseumClick = {},
-            )
+        composable(RouteDestinations.Main) {
+            MainNavGraph()
         }
     }
 }

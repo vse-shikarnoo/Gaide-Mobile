@@ -8,18 +8,33 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kv.gaide.common.ui.MuseumCard
+import kv.gaide.feature.museumList.MuseumListViewModel
 
 @Composable
-fun DetailMuseumScreen() {
+fun DetailMuseumScreen(
+    museumId: Int,
+    viewModel: DetailMuseumViewModel = viewModel(),
+    museumViewModel: MuseumListViewModel = viewModel(),
+) {
+    val uiState by museumViewModel.uiState.collectAsState()
+
     LazyColumn {
         item {
-
+            MuseumInfo()
+        }
+        items(uiState.museums) {
+            MuseumCard(it) {}
         }
     }
 }
@@ -62,7 +77,7 @@ fun MuseumInfo() {
 @Preview(showBackground = true)
 @Composable
 fun DetailMuseumScreenPreview() {
-    DetailMuseumScreen()
+    DetailMuseumScreen(0)
 }
 
 @Preview(showBackground = true)

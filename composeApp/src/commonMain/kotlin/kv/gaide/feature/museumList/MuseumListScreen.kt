@@ -27,7 +27,7 @@ import kv.gaide.common.ui.MuseumCard
 @Composable
 fun MuseumListScreen(
     viewModel: MuseumListViewModel = viewModel(),
-    onMuseumClick: () -> Unit = {}
+    onMuseumClick: (Int) -> Unit = {}
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -56,15 +56,15 @@ fun MuseumListScreen(
                 items(uiState.museums) { museum ->
                     CardVertical(
                         title = museum.name,
-                        onClick = { onMuseumClick() })
+                        onClick = { onMuseumClick(museum.id) })
                 }
             }
         }
         items(uiState.museums) { museum ->
             MuseumCard(
                 museum = museum,
-                onClick = { onMuseumClick() })
-            CardHorizontal(title = museum.name, onClick = { onMuseumClick() })
+                onClick = { onMuseumClick(museum.id) })
+            CardHorizontal(title = museum.name, onClick = { onMuseumClick(museum.id) })
             Spacer(modifier = Modifier.height(8.dp))
         }
     }

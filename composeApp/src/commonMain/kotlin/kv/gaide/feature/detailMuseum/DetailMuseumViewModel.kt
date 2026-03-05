@@ -1,4 +1,6 @@
 package kv.gaide.feature.detailMuseum
 
-class DetailMuseumViewModel {
+import androidx.lifecycle.ViewModel
+
+class DetailMuseumViewModel() : ViewModel() {
 }
