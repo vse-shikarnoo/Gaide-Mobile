@@ -60,12 +60,10 @@ fun MuseumListScreen(
                 }
             }
         }
-        item {
-            MuseumCard(
-                museum = uiState.museums.first(),
-                onClick = { onMuseumClick() })
-        }
         items(uiState.museums) { museum ->
+            MuseumCard(
+                museum = museum,
+                onClick = { onMuseumClick() })
             CardHorizontal(title = museum.name, onClick = { onMuseumClick() })
             Spacer(modifier = Modifier.height(8.dp))
         }

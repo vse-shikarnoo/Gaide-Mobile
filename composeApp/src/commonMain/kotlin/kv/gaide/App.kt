@@ -6,6 +6,7 @@ import kv.gaide.navigation.AppNavigation
 
 @Composable
 fun App() {
+
     MaterialTheme {
         AppNavigation()
     }

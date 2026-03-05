@@ -7,4 +7,5 @@ data class Museum(
     val imageRes: Int? = null,
     val imageUrl: String? = null,
     val description: String = "",
+    val tags:List<String> = emptyList()
 )
