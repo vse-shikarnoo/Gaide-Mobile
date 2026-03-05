@@ -62,6 +62,7 @@ fun MuseumListScreen(
         }
         items(uiState.museums) { museum ->
             MuseumCard(
+                modifier = Modifier.fillMaxWidth(),
                 museum = museum,
                 onClick = { onMuseumClick(museum.id) })
             CardHorizontal(title = museum.name, onClick = { onMuseumClick(museum.id) })

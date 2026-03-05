@@ -28,12 +28,12 @@ import kv.gaide.data.models.Museum
 @Composable
 fun MuseumCard(
     museum: Museum,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp)
-            .fillMaxWidth()
             .clickable { onClick() }
             .aspectRatio(1f),
         shape = RoundedCornerShape(16.dp)
@@ -110,7 +110,7 @@ fun MuseumCard(
 @Composable
 fun MuseumCardPreview() {
     MuseumCard(
-        Museum(1, "Государственный Эрмитаж", "Санкт-Петербург", tags = listOf(
+        museum = Museum(1, "Государственный Эрмитаж", "Санкт-Петербург", tags = listOf(
             "Искусство",
             "Архитектура",
             "ПУПУ"

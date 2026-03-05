@@ -7,8 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,12 +30,15 @@ fun DetailMuseumScreen(
 ) {
     val uiState by museumViewModel.uiState.collectAsState()
 
-    LazyColumn {
-        item {
-            MuseumInfo()
-        }
-        items(uiState.museums) {
-            MuseumCard(it) {}
+    Column {
+        MuseumInfo()
+
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 150.dp)
+        ){
+            items(uiState.museums) {
+                MuseumCard(it) {}
+            }
         }
     }
 }
