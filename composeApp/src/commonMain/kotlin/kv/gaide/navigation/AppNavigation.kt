@@ -18,7 +18,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
 
     NavHost(
         navController = navController,
-        startDestination = MainDestinations.Main
+        startDestination = MainDestinations.Auth
     ) {
         composable(MainDestinations.Auth) {
             AuthNavGraph(
