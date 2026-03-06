@@ -1,12 +1,9 @@
 package kv.gaide.feature.museumList
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
@@ -19,8 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kv.gaide.common.ui.CardHorizontal
-import kv.gaide.common.ui.CardVertical
 import kv.gaide.common.ui.MuseumCard
 
 
@@ -47,26 +42,11 @@ fun MuseumListScreen(
                 }
             )
         }
-        item {
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp)
-            ) {
-                items(uiState.museums) { museum ->
-                    CardVertical(
-                        title = museum.name,
-                        onClick = { onMuseumClick(museum.id) })
-                }
-            }
-        }
         items(uiState.museums) { museum ->
             MuseumCard(
                 modifier = Modifier.fillMaxWidth(),
                 museum = museum,
                 onClick = { onMuseumClick(museum.id) })
-            CardHorizontal(title = museum.name, onClick = { onMuseumClick(museum.id) })
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }

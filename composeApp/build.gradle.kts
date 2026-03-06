@@ -55,6 +55,14 @@ kotlin {
 
             implementation(libs.navigation.compose)
 
+
+            implementation("com.composables:icons-material-icons-filled-cmp:2.2.1")
+            implementation("com.composables:icons-material-icons-outlined-cmp:2.2.1")
+            implementation("com.composables:icons-material-icons-rounded-cmp:2.2.1")
+            implementation("com.composables:icons-material-icons-sharp-cmp:2.2.1")
+            implementation("com.composables:icons-material-icons-twotone-cmp:2.2.1")
+
+
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
