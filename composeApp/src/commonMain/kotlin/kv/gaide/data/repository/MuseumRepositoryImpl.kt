@@ -93,21 +93,16 @@ class MuseumRepositoryImpl() : MuseumRepository {
     )
 
     override suspend fun getMuseumsList(): Result<List<Museum>> = runCatching {
-        Napier.e(museumAPI.getMuseums().toString(), tag = "Network")
-            //mockMuseums
         museumAPI.getMuseums()
     }
 
     override suspend fun getMuseumsByCity(city: String): Result<List<Museum>> = runCatching {
-        mockMuseums.filter { museum ->
-            museum.city == city
-        }
+        museumAPI.getMuseums()
     }
 
     override suspend fun getMuseumByName(name: String): Result<List<Museum>> = runCatching {
-        mockMuseums.filter { museum ->
-            museum.name.contains(name)
-
-        }
+        museumAPI.getMuseums(
+            name
+        )
     }
 }
