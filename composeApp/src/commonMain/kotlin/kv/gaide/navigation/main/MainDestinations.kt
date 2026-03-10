@@ -7,7 +7,7 @@ sealed class MainDestinations(val route: String) {
     object MuseumList : MainDestinations("$MAIN_ROUTE/museum_list")
 
     object DetailMuseum : MainDestinations("$MAIN_ROUTE/detail_museum/{museumId}") {
-        fun createRoute(museumId: Int) = "$MAIN_ROUTE/detail_museum/$museumId"
+        fun createRoute(museumId: String) = "$MAIN_ROUTE/detail_museum/$museumId"
     }
 
     object Hall : MainDestinations("$MAIN_ROUTE/hall/{hallId}") {

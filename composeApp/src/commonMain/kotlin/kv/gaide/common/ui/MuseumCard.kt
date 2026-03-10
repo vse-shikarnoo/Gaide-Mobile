@@ -110,7 +110,7 @@ fun MuseumCard(
 @Composable
 fun MuseumCardPreview() {
     MuseumCard(
-        museum = Museum(1, "Государственный Эрмитаж", "Санкт-Петербург", tags = listOf(
+        museum = Museum("1", "Государственный Эрмитаж", "Санкт-Петербург", tags = listOf(
             "Искусство",
             "Архитектура",
             "ПУПУ"

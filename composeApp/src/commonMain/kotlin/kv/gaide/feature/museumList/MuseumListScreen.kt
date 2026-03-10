@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kv.gaide.common.ui.MuseumCard
@@ -22,7 +23,7 @@ import kv.gaide.common.ui.MuseumCard
 @Composable
 fun MuseumListScreen(
     viewModel: MuseumListViewModel = viewModel(),
-    onMuseumClick: (Int) -> Unit = {}
+    onMuseumClick: (String) -> Unit = {}
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -40,6 +41,11 @@ fun MuseumListScreen(
                     viewModel.updateSearch(it)
                     viewModel.getMuseumByName(it)
                 }
+            )
+        }
+        item {
+            Text(
+                uiState.errorMessage?:"",
             )
         }
         items(uiState.museums) { museum ->

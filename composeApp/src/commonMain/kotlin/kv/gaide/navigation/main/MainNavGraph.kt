@@ -37,7 +37,7 @@ fun MainNavGraph(
             )
         ) { backStackEntry ->
 
-            val museumId = backStackEntry.arguments?.getInt("museumId") ?: 0
+            val museumId = backStackEntry.arguments?.getString("museumId") ?: "0"
 
             DetailMuseumScreen(museumId)
         }

@@ -7,9 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
 
-    //id("ru.ivk1800.riflesso") // <- Important! You need to add it after the compose plugin.
-
-
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -51,7 +49,16 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.svg)
             implementation(libs.coil.network.ktor3)
+
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.auth)
+
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+            implementation(libs.napier)
 
             implementation(libs.navigation.compose)
 
@@ -62,7 +69,7 @@ kotlin {
             implementation("com.composables:icons-material-icons-sharp-cmp:2.2.1")
             implementation("com.composables:icons-material-icons-twotone-cmp:2.2.1")
 
-
+            implementation(libs.kotlinx.serialization.json)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

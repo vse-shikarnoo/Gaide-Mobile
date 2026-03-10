@@ -42,7 +42,7 @@ import kv.gaide.feature.museumList.MuseumListViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailMuseumScreen(
-    museumId: Int,
+    museumId: String,
     viewModel: DetailMuseumViewModel = viewModel(),
     museumViewModel: MuseumListViewModel = viewModel(),
 ) {
@@ -123,7 +123,7 @@ fun MuseumInfo() {
 @Preview(showBackground = true)
 @Composable
 fun DetailMuseumScreenPreview() {
-    DetailMuseumScreen(0)
+    DetailMuseumScreen("0")
 }
 
 @Preview(showBackground = true)
