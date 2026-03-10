@@ -1,4 +1,4 @@
-package kv.gaide.data.repository
+package kv.gaide.data.repository.auth
 
 import kv.gaide.data.models.AuthResponse
 import kv.gaide.data.models.LoginRequest

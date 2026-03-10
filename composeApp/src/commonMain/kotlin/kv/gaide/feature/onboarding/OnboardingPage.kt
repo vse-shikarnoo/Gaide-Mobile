@@ -1,4 +1,4 @@
-package kv.gaide.presentation.onboarding
+package kv.gaide.feature.onboarding
 
 data class OnboardingPage(
     val imageUrl: String,

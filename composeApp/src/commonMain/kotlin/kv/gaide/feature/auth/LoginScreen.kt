@@ -1,4 +1,4 @@
-package kv.gaide.presentation.auth
+package kv.gaide.feature.auth
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,21 +22,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import kv.gaide.data.models.AuthState
 import kv.gaide.utils.PasswordStrength
 import kv.gaide.utils.getColorForStrength
-import kv.gaide.viewmodel.AuthViewModel
 
 @Composable
-fun AuthScreen(
+fun LoginScreen(
     viewModel: AuthViewModel,
-    onNavigateToRegister: () -> Unit,
-    onNavigateBack: () -> Unit
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onLoginClick: () -> Unit,
+    onNavigateToRegister: () -> Unit
 ) {
-    val email by viewModel.email.collectAsState()
-    val password by viewModel.password.collectAsState()
-    val state by viewModel.state.collectAsState()
-
+    val uiState by viewModel.uiState.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,25 +41,29 @@ fun AuthScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
         Text("Вход", style = MaterialTheme.typography.headlineMedium)
 
         Spacer(modifier = Modifier.height(40.dp))
 
+        // EMAIL
         OutlinedTextField(
-            value = email,
-            onValueChange = viewModel::updateEmail,
+            value = uiState.email,
+            onValueChange = onEmailChange,
             label = { Text("Email") },
             singleLine = true,
-            isError = viewModel.emailError != null,
+            isError = uiState.emailError != null,
             modifier = Modifier.fillMaxWidth(),
         )
 
-        if (viewModel.emailError != null) {
+        if (uiState.emailError != null) {
             Text(
-                text = viewModel.emailError!!,
+                text = uiState.emailError!!,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth()
             )
         } else {
             Spacer(modifier = Modifier.height(32.dp))
@@ -71,25 +71,25 @@ fun AuthScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-
+        // PASSWORD
         OutlinedTextField(
-            value = password,
-            onValueChange = viewModel::updatePassword,
+            value = uiState.password,
+            onValueChange = onPasswordChange,
             label = {
                 Text(
-                    when (viewModel.passwordError) {
+                    when (uiState.passwordStrength) {
                         PasswordStrength.BLANK -> "Пароль"
-                        else -> viewModel.passwordError.message
+                        else -> uiState.passwordStrength.message
                     },
-                    color = getColorForStrength(viewModel.passwordError)
+                    color = getColorForStrength(uiState.passwordStrength)
                 )
             },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = getColorForStrength(viewModel.passwordError),
-                focusedBorderColor = getColorForStrength(viewModel.passwordError),
+                unfocusedBorderColor = getColorForStrength(uiState.passwordStrength),
+                focusedBorderColor = getColorForStrength(uiState.passwordStrength),
                 errorBorderColor = MaterialTheme.colorScheme.error
             ),
         )
@@ -97,11 +97,11 @@ fun AuthScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         Button(
-            onClick = viewModel::login,
-            enabled = state != AuthState.Loading,
+            onClick = onLoginClick,
+            enabled = !uiState.isLoading,
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (state == AuthState.Loading) {
+            if (uiState.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.size(24.dp))
             } else {
                 Text("Войти")
@@ -114,9 +114,10 @@ fun AuthScreen(
             Text("Нет аккаунта? Зарегистрироваться")
         }
 
-        if (state is AuthState.Error) {
+        if (uiState.errorMessage != null) {
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = (state as AuthState.Error).message,
+                text = uiState.errorMessage!!,
                 color = MaterialTheme.colorScheme.error
             )
         }
