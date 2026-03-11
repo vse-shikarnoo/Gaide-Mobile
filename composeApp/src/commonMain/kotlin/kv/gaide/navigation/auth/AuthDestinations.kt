@@ -5,12 +5,12 @@ sealed class AuthDestinations(
     val route: String
 ) {
     object Onboarding : AuthDestinations(
-        AUTH_ROUTE + "_onboarding"
+        "$AUTH_ROUTE/onboarding"
     )
     object Login : AuthDestinations(
-        AUTH_ROUTE + "_login"
+        "$AUTH_ROUTE/login"
     )
     object Registration : AuthDestinations(
-        AUTH_ROUTE + "_registration"
+        "$AUTH_ROUTE/registration"
     )
 }
