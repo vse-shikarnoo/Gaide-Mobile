@@ -54,42 +54,68 @@ class AuthViewModel() : ViewModel() {
         if (!checkFields()) return
 
         clearError()
-
         viewModelScope.launch {
+
             _uiState.update { it.copy(isLoading = true) }
             val request = LoginRequest(_uiState.value.email, _uiState.value.password)
             repository.login(request).onSuccess {
-
-            }.onFailure {
-
+                _uiState.update {
+                    it.copy(
+                        isAuthenticated = true
+                    )
+                }
+                _events.emit(AuthEvent.LoginSuccess)
+            }.onFailure { error ->
+                _uiState.update {
+                    it.copy(
+                        errorMessage = error.message,
+                        isAuthenticated = false
+                    )
+                }
             }
-            delay(1000)
             _uiState.update { it.copy(isLoading = false) }
-            _events.emit(AuthEvent.LoginSuccess)
         }
     }
 
     fun register() {
-        if (!checkFields()) return
-
-        clearError()
-
         viewModelScope.launch {
+            if (!checkFields()) return@launch
+
+            clearError()
             _uiState.update { it.copy(isLoading = true) }
             val request = RegisterRequest(
                 _uiState.value.email,
                 _uiState.value.password,
                 _uiState.value.name.takeIf { it.isNotBlank() })
-            val result = repository.register(request)
-            delay(1000)
+
+            repository.register(request).onSuccess {
+                _uiState.update {
+                    it.copy(
+                        isAuthenticated = true
+                    )
+                }
+                _events.emit(AuthEvent.RegistrationSuccess)
+            }.onFailure { error ->
+                _uiState.update {
+                    it.copy(
+                        errorMessage = error.message,
+                        isAuthenticated = false
+                    )
+                }
+            }
+
             _uiState.update { it.copy(isLoading = false) }
-            _events.emit(AuthEvent.RegistrationSuccess)
+
         }
     }
 
     private fun checkFields(): Boolean {
-        isValidEmail(_uiState.value.email)
-        return _uiState.value.emailError == null || (_uiState.value.passwordStrength != PasswordStrength.VERY_STRONG && _uiState.value.passwordStrength != PasswordStrength.STRONG)
+        _uiState.update {
+            it.copy(
+                emailError = isValidEmail(_uiState.value.email)
+            )
+        }
+        return _uiState.value.emailError == null && (_uiState.value.passwordStrength == PasswordStrength.VERY_STRONG || _uiState.value.passwordStrength == PasswordStrength.STRONG)
     }
 
     fun clearError() {
@@ -97,7 +123,7 @@ class AuthViewModel() : ViewModel() {
     }
 
     private fun isValidEmail(email: String): String? {
-        if (email.isBlank()) {
+        if (email.isBlank() || email.isEmpty()) {
             return "Email не может быть пустым"
         }
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"

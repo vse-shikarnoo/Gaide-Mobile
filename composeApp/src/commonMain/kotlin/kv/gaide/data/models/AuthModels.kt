@@ -1,5 +1,6 @@
 package kv.gaide.data.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,5 +18,6 @@ data class RegisterRequest(
 
 @Serializable
 data class AuthResponse(
-    val isAuth: Boolean,
+    @SerialName("access_token")
+    val token: String
 )
